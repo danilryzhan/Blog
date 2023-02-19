@@ -17,15 +17,9 @@ namespace API.Extensions
                     options => options.UseSqlServer(config.GetConnectionString("BlogConnectionStrings")));
             services.AddMediatR(typeof(ActivitiesList.Handler));
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
-            services.AddCors(opt =>
-            {
-                opt.AddPolicy("CorsPolicy", policy =>
-                {
-                    policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
-                });
-            });
+           
 
-            return services;
+            return services; 
 
 
         }

@@ -14,10 +14,6 @@ namespace API.Controllers
     {
 
 
-     
-
-      
-
         [HttpGet]
         public async Task<ActionResult<List<Activity>>>GetActivities(CancellationToken ct)
         {
