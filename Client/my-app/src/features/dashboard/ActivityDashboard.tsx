@@ -1,6 +1,6 @@
 import React from "react";
 import { Grid } from "semantic-ui-react";
-import { Activity } from "../../models/Activity";
+import { Activity } from "../../App/models/Activity";
 import ActivityDetails from "../details/ActivityDetails";
 import ActivityForm from "../forms/ActivityForm";
 import ActivityList from "./ActivityList";
@@ -16,16 +16,19 @@ interface Props {
     closeForm:()=>void;
     createOrEdit:(activity:Activity) => void;
     deleteActivity:(id:string)=>void;
+    submiting:boolean;
 }
 
 export default function ActivitiyDashvoard({activities,selectedActivity ,selectActivity,cancelSelectActivity,
-  editMode,openForm,closeForm,createOrEdit,deleteActivity}:Props) {
+  editMode,openForm,closeForm,createOrEdit,deleteActivity,submiting}:Props) {
   return (
     <Grid>
       <Grid.Column width="10">
         <ActivityList activities={activities} 
         deleteActivity ={deleteActivity}
-        selectActivity={selectActivity}></ActivityList>
+        selectActivity={selectActivity}
+        submiting={submiting}
+        ></ActivityList>
       </Grid.Column>
       <Grid.Column width="6">
         {selectedActivity&& !editMode&&
@@ -36,7 +39,11 @@ export default function ActivitiyDashvoard({activities,selectedActivity ,selectA
         
         />}
         {editMode&&
-        <ActivityForm createOrEdit={createOrEdit} closeForm={closeForm} activity={selectedActivity}/>}
+        <ActivityForm createOrEdit={createOrEdit} 
+        closeForm={closeForm}
+        activity={selectedActivity}
+        submiting = {submiting}
+        />}
       
       </Grid.Column>
     </Grid>
