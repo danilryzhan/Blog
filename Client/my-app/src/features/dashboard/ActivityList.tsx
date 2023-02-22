@@ -1,17 +1,15 @@
+import { observer } from "mobx-react-lite";
 import React, { SyntheticEvent, useState } from "react";
 import { Button, Item, Label, Segment } from "semantic-ui-react";
-import { Activity } from "../../App/models/Activity";
+import { useStore } from "../../App/stores/Store";
 
-interface Props{
-    activities:Activity[];
-    selectActivity:(id:string)=>void;
-    deleteActivity:(id:string)=>void;
-    submiting:boolean;
-}
 
-export default function ActivityList({activities,selectActivity,deleteActivity,submiting}:Props)
+
+export default observer( function ActivityList()
 {
+    const {activityStore} = useStore();
     const [target, settarget] = useState('');
+    const {deleteActivity,activitiesByDate,loading}=activityStore;
 
     function handlerDelete(e: SyntheticEvent<HTMLButtonElement> ,id:string)
     {
@@ -21,7 +19,7 @@ export default function ActivityList({activities,selectActivity,deleteActivity,s
     return(
         <Segment>
             <Item.Group divided>
-                {activities.map(act=>(
+                {activitiesByDate.map(act=>(
                     <Item key={act.id }>
                         <Item.Content>
                             <Item.Header as="a">{act.title}</Item.Header>
@@ -30,10 +28,10 @@ export default function ActivityList({activities,selectActivity,deleteActivity,s
                                 <div>{act.description}{act.venue}</div>
                             </Item.Description>
                             <Item.Extra>
-                            <Button onClick={()=>selectActivity(act.id)} floated="right" content='View' color="blue"/>
+                            <Button onClick={()=>activityStore.selectActivity(act.id)} floated="right" content='View' color="blue"/>
                             <Button
                             name={act.id} 
-                            loading={submiting && target == act.id} 
+                            loading={loading && target == act.id} 
                             onClick={(e)=>handlerDelete(e,act.id)}
                             floated="right" content='Delete' color="red"/>
                                 <Label basic content ={act.category}></Label>
@@ -46,4 +44,4 @@ export default function ActivityList({activities,selectActivity,deleteActivity,s
         </Segment>
 
     )
-}
+})
