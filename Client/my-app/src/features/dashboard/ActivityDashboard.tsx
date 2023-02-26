@@ -1,10 +1,8 @@
 import { observer } from "mobx-react-lite";
-import React from "react";
+import React, { useEffect } from "react";
 import { Grid } from "semantic-ui-react";
-import { Activity } from "../../App/models/Activity";
+import LoadingComponent from "../../App/layout/LoudingComponent";
 import { useStore } from "../../App/stores/Store";
-import ActivityDetails from "../details/ActivityDetails";
-import ActivityForm from "../forms/ActivityForm";
 import ActivityList from "./ActivityList";
 
 
@@ -12,7 +10,14 @@ import ActivityList from "./ActivityList";
 
 export default observer ( function  ActivitiyDashvoard() {
     const {activityStore} = useStore();
-    
+    const {loadActivities, activityRegistry}= activityStore;
+    useEffect(()=>{
+      if(activityRegistry.size<= 1)loadActivities();
+      
+    },[loadActivities,activityRegistry.size])
+  
+  
+    if (activityStore.loadingInitial) return <LoadingComponent content='Loadong app '/>
   return (
     <Grid>
       <Grid.Column width="10">
@@ -20,10 +25,7 @@ export default observer ( function  ActivitiyDashvoard() {
         ></ActivityList>
       </Grid.Column>
       <Grid.Column width="6">
-        {activityStore.selectedActivity && !activityStore.editMode&&
-        <ActivityDetails/>}
-        {activityStore.editMode&&
-        <ActivityForm  />}
+       <h2>Activity dashbord</h2>
       
       </Grid.Column>
     </Grid>

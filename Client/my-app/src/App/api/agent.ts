@@ -3,7 +3,7 @@ import { Activity } from "../models/Activity";
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
-const responseBody = <T>(response: AxiosResponse) => response.data;
+const responseBody =     (response: AxiosResponse) => response.data;
 
 const requests = {
     get:<T>(url:string)=> axios.get<T>(url).then<T>(responseBody),
@@ -14,7 +14,7 @@ const requests = {
 
 const Activities ={
     list:()=> requests.get<Activity[]>('/activities'),
-    details:(id:string) => requests.get<Activity>(`/activity/${id}`),
+    details:(id:string) => requests.get<Activity>(`/activities/${id}`),
     create:(activity:Activity)=> requests.post<void>('/activities',activity),
     update:(activity:Activity)=> requests.post<void>(`/activities/${activity.id}`,activity),
     delete: (id:string) =>requests.del<void>(`/activities/${id}`)
