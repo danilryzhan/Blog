@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Persistence;
 using Application.Core;
 using API.Extensions;
+using API.Middelewere;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,8 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

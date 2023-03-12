@@ -1,5 +1,7 @@
-﻿using Domain;
+﻿using Application.Core;
+using Domain;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
@@ -12,9 +14,9 @@ namespace Application.Activities
 {
     public class ActivitiesList
     {
-        public class Query : IRequest<List<Activity>> { };
+        public class Query : IRequest<Result<List<Activity>>> { };
 
-        public class Handler : IRequestHandler<Query, List<Activity>>
+        public class Handler : IRequestHandler<Query, Result<List<Activity>>>
         {
             
             public readonly DataContext _context;
@@ -25,9 +27,9 @@ namespace Application.Activities
 
             
 
-            public async Task<List<Activity>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<Activity>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await _context.Activities.ToListAsync();
+                return Result < List < Activity >>.Success(await _context.Activities.ToListAsync());
             }
         }
     }
