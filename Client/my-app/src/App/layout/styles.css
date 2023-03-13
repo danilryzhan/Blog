@@ -17,6 +17,10 @@ background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(235,70,252,1) 98%
 
 }
 
+.react-datepicker-wrapper{
+  width: 100%;
+}
+
 /*home page styles*/
 
 .masthead {
