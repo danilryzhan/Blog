@@ -21,10 +21,9 @@ namespace API.Extensions
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssemblyContaining<ActivitiesCreate>();
-           
 
             return services; 
-
+             
 
         }
     }

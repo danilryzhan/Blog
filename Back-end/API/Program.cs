@@ -8,15 +8,23 @@ using Persistence;
 using Application.Core;
 using API.Extensions;
 using API.Middelewere;
+using Microsoft.AspNetCore.Identity;
+using Domain;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(opt=>
+{
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    opt.Filters.Add(new AuthorizeFilter(policy));
+});
 builder.Services.AddAplicationServices(builder.Configuration);
-
+builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -41,6 +49,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors(MyAllowSpecificOrigins);
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
@@ -48,7 +57,8 @@ app.MapControllers();
 using (var serviceScope = app.Services.CreateScope())
 {
     var context = serviceScope.ServiceProvider.GetService<DataContext>();
-    await Seed.SeedData(context);
+    var userManager = serviceScope.ServiceProvider.GetService<UserManager<AppUser>>();
+    await Seed.SeedData(context,userManager);
 
   
 }

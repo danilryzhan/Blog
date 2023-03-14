@@ -2,12 +2,15 @@
 using Application.Activities;
 using Domain;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace API.Controllers
 {
+    
+    
     [ApiController]
     [Route("api/[controller]")]
     public class ActivitiesController : BaseApiController
@@ -18,8 +21,11 @@ namespace API.Controllers
         public async Task<ActionResult>GetActivities(CancellationToken ct)
         {
             return HandleResult( await Mediator.Send(new ActivitiesList.Query(),ct));
-        }
-        [HttpGet("{Id}")]   
+        } 
+        
+          
+        [HttpGet("{Id}")]
+        
         public async Task<ActionResult> GetActivity(Guid Id)
         {
             return HandleResult(await Mediator.Send(new ActivitiesDetails.Query { Id = Id }));
@@ -31,7 +37,9 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new ActivitiesCreate.Command { Activity=activity}));
         }
 
+       
         [HttpPost("{id}")]
+   
         public async Task<IActionResult> EditActivity(Guid Id , Activity activity)
         {
             activity.Id = Id;
