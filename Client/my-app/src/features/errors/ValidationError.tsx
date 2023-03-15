@@ -2,7 +2,7 @@ import React from "react"
 import { Link } from "react-router-dom";
 import { Button, Header, Icon, Message, Segment } from "semantic-ui-react";
 interface Props {
-    errors:string[];
+    errors:any;
 }
  
 function ValidationError ({errors}:Props)  {
@@ -11,7 +11,7 @@ function ValidationError ({errors}:Props)  {
             <Message error>
                 {errors&&(
                     <Message.List>
-                        {errors.map((err:string,i)=>(
+                        {errors.map((err:string,i:any)=>(
                             <Message.Item key={i}>{err}</Message.Item>
                         ))}
                     </Message.List>
