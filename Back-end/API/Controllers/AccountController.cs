@@ -1,5 +1,6 @@
 ﻿using API.DTOs;
 using API.Serveces;
+using Application.Activities;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -76,6 +77,10 @@ namespace API.Controllers
             var user = await userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
             return CreateUserObject(user);
         }
+
+
+
+
         //public IActionResult Index()
         //{
         //    return View();

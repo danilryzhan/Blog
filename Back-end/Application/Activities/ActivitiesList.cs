@@ -1,4 +1,6 @@
 ﻿using Application.Core;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -14,22 +16,31 @@ namespace Application.Activities
 {
     public class ActivitiesList
     {
-        public class Query : IRequest<Result<List<Activity>>> { };
+        public class Query : IRequest<Result<List<ActivityDto>>> { };
 
-        public class Handler : IRequestHandler<Query, Result<List<Activity>>>
+        public class Handler : IRequestHandler<Query, Result<List<ActivityDto>>>
         {
             
             public readonly DataContext _context;
-            public Handler(DataContext context)
+            private readonly IMapper mapper;
+
+            public Handler(DataContext context, IMapper mapper)
             {
                 _context = context;
+                this.mapper = mapper;
             }
 
             
 
-            public async Task<Result<List<Activity>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<ActivityDto>>> Handle(
+                Query request, 
+                CancellationToken cancellationToken)
             {
-                return Result < List < Activity >>.Success(await _context.Activities.ToListAsync());
+                var activities = await _context.Activities
+                    .ProjectTo<ActivityDto>(mapper.ConfigurationProvider)
+                    .ToListAsync();
+
+                return Result < List < ActivityDto >>.Success(activities);
             }
         }
     }

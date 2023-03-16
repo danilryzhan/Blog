@@ -1,7 +1,10 @@
 ﻿using Application.Core;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
 using System.Collections.Generic;
@@ -13,26 +16,31 @@ namespace Application.Activities
 {
     public class ActivitiesDetails
     {
-        public class Query : IRequest<Result<Activity>>
+        public class Query : IRequest<Result<ActivityDto>>
         {
             public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Result<Activity>>
+        public class Handler : IRequestHandler<Query, Result<ActivityDto>>
         {
-            public Handler(DataContext context)
+            private readonly IMapper mapper;
+
+            public Handler(DataContext context, IMapper mapper)
             {
                 _context = context;
+                this.mapper = mapper;
             }
 
             public DataContext _context { get; }
 
-            public async Task<Result<Activity>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<ActivityDto>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var activity = await _context.Activities.FindAsync(request.Id);
+                var activity = await _context.Activities
+                    .ProjectTo<ActivityDto>(mapper.ConfigurationProvider)
+                    .FirstOrDefaultAsync(x=>x.Id == request.Id); ;
                 if (activity == null) {  }
 
-                return Result<Activity>.Success(activity);
+                return Result<ActivityDto>.Success(activity);
             }
         }
     }
