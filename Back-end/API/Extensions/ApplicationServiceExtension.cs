@@ -3,6 +3,7 @@ using Application.Core;
 using Application.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Infrastructure.Photos;
 using Infrastructure.Security;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -19,12 +20,16 @@ namespace API.Extensions
             services.AddEndpointsApiExplorer();
             services.AddDbContext<DataContext>(
                     options => options.UseSqlServer(config.GetConnectionString("BlogConnectionStrings")));
-            services.AddMediatR(typeof(ActivitiesList.Handler));
+    
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssemblyContaining<ActivitiesCreate>();
             services.AddHttpContextAccessor();
             services.AddScoped<IUserAccessor,UserAccessor>();
+            services.AddScoped<IPhotoAccesor,PhotoAccesor>();
+            services.Configure<CloudinarySettings>(config.GetSection("Cloudinary"));  
+            services.AddMediatR(typeof(ActivitiesList.Handler));
+
             return services; 
              
 

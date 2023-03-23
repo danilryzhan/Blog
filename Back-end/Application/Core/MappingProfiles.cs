@@ -20,10 +20,15 @@ namespace Application.Core
             
             
             ///Profile maping
-            CreateMap<ActivityAttendee, Profiles.Profile>()
+            CreateMap<ActivityAttendee, AttendeDto>()
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.AppUser.DisplyName))
                 .ForMember(d => d.Username, o => o.MapFrom(s => s.AppUser.UserName))
-                .ForMember(d => d.Bio, o => o.MapFrom(s => s.AppUser.Bio));
+                .ForMember(d => d.Bio, o => o.MapFrom(s => s.AppUser.Bio))
+             .ForMember(p => p.Image, u => u.MapFrom(x => x.AppUser.Photos.FirstOrDefault(x => x.IsMain).Url));
+
+            CreateMap<AppUser, Profiles.Profile>()
+                .ForMember(p => p.Image, u => u.MapFrom(x => x.Photos.FirstOrDefault(x => x.IsMain).Url));
         }
+
     }
 }
