@@ -16,7 +16,7 @@ export default class ProfileStore {
         const profile = await agent.Profiles.get(username);
         runInAction(() => {this.profile = profile;
         this.loadingProfile = false;
-        .
+        this.profile = profile;
         });
         
 

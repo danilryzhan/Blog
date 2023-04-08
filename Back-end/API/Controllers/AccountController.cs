@@ -48,7 +48,7 @@ namespace API.Controllers
             };
             var user = new AppUser
             {
-                DisplyName = registerDto.DisplayName,
+                DisplayName = registerDto.DisplayName,
                 Email = registerDto.Email,
                 UserName = registerDto.UserName,
             };
@@ -64,7 +64,7 @@ namespace API.Controllers
         {
             return new UserDto
             {
-                DisplayName = user.DisplyName,
+                DisplayName = user.DisplayName,
                 Image = user?.Photos?.FirstOrDefault(x=>x.IsMain).Url,
                 Token = tokenService.CreateToken(user),
                 Username = user.UserName,
